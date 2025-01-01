@@ -33,6 +33,22 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get the custom validation messages.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.required' => 'Пожалуйста, введите ваш адрес электронной почты.',
+            'email.string' => 'Электронная почта должна быть строкой.',
+            'email.email' => 'Пожалуйста, введите корректный адрес электронной почты.',
+            'password.required' => 'Пожалуйста, введите ваш пароль.',
+            'password.string' => 'Пароль должен быть строкой.',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -80,6 +96,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

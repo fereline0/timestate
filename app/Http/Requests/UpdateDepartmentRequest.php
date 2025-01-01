@@ -17,4 +17,13 @@ class UpdateDepartmentRequest extends FormRequest
             'name' => 'required|string|max:255',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Пожалуйста, введите название отдела.',
+            'name.string' => 'Название отдела должно быть строкой.',
+            'name.max' => 'Название отдела не должно превышать 255 символов.',
+        ];
+    }
 }

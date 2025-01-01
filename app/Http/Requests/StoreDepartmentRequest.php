@@ -13,7 +13,7 @@ class StoreDepartmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Allow all users to make this request
+        return true;
     }
 
     /**
@@ -25,6 +25,15 @@ class StoreDepartmentRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Пожалуйста, введите название отдела.',
+            'name.string' => 'Название отдела должно быть строкой.',
+            'name.max' => 'Название отдела не должно превышать 255 символов.',
         ];
     }
 }
