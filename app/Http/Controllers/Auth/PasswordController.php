@@ -10,14 +10,16 @@ use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
 {
-    /**
-     * Update the user's password.
-     */
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
+        ], [
+            'current_password.required' => 'Пожалуйста, введите текущий пароль.',
+            'current_password.current_password' => 'Текущий пароль неверен.',
+            'password.required' => 'Пожалуйста, введите новый пароль.',
+            'password.confirmed' => 'Пароли не совпадают.',
         ]);
 
         $request->user()->update([

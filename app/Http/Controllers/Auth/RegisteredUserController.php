@@ -17,7 +17,7 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Отобразить представление регистрации.
      */
     public function create(): View
     {
@@ -27,7 +27,7 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Обработать входящий запрос на регистрацию.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -38,6 +38,20 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'department_id' => ['required', 'exists:departments,id'],
+        ], [
+            'name.required' => 'Пожалуйста, введите ваше имя.',
+            'name.string' => 'Имя должно быть строкой.',
+            'name.max' => 'Имя не должно превышать 255 символов.',
+            'email.required' => 'Пожалуйста, введите ваш адрес электронной почты.',
+            'email.string' => 'Адрес электронной почты должен быть строкой.',
+            'email.lowercase' => 'Адрес электронной почты должен быть в нижнем регистре.',
+            'email.email' => 'Пожалуйста, введите корректный адрес электронной почты.',
+            'email.max' => 'Адрес электронной почты не должен превышать 255 символов.',
+            'email.unique' => 'Этот адрес электронной почты уже занят.',
+            'password.required' => 'Пожалуйста, введите пароль.',
+            'password.confirmed' => 'Пароли не совпадают.',
+            'department_id.required' => 'Пожалуйста, выберите отдел.',
+            'department_id.exists' => 'Выбранный отдел не существует.',
         ]);
 
         $user = User::create([
@@ -47,7 +61,7 @@ class RegisteredUserController extends Controller
             'department_id' => $request->department_id,
         ]);
 
-        $user->roles()->attach(Role::where('name', 'User ')->first());
+        $user->roles()->attach(Role::where('name', 'User')->first());
 
         event(new Registered($user));
 
