@@ -16,11 +16,14 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('', [ProfileController::class, 'update'])->name('profile.update');
     });
 
+    Route::prefix('working-times')->group(function () {
+        Route::post('start', [WorkingTimeController::class, 'workStarted'])->name('working-times.start');
+        Route::post('end', [WorkingTimeController::class, 'workEnded'])->name('working-times.end');
+    });
+
     Route::prefix('dashboard')->middleware('role:Admin')->group(function () {
         Route::prefix('working-times')->group(function () {
             Route::get('', [WorkingTimeController::class, 'index'])->name('dashboard.working-times.index');
-            Route::post('start', [WorkingTimeController::class, 'workStarted'])->name('dashboard.working-times.start');
-            Route::post('end', [WorkingTimeController::class, 'workEnded'])->name('dashboard.working-times.end');
             Route::get('create', [WorkingTimeController::class, 'create'])->name('dashboard.working-times.create');
             Route::post('', [WorkingTimeController::class, 'store'])->name('dashboard.working-times.store');
             Route::prefix('{id}')->group(function () {

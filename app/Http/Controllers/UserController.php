@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (Auth::user()->id == $user->id) {
+        if ($request->user()->id == $user->id) {
             Auth::logout();
         }
 

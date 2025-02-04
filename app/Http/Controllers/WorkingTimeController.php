@@ -25,15 +25,15 @@ class WorkingTimeController extends Controller
         return view('dashboard.working-times.index', compact('workingTimes', 'date'));
     }
 
-    public function home(): View
+    public function home(Request $request): View
     {
         $today = now()->format('Y-m-d');
 
-        $workingTimes = WorkingTime::where('user_id', Auth::id())
+        $workingTimes = WorkingTime::where('user_id', $request->user()->id)
             ->where('date', $today)
             ->paginate(10);
 
-        $unfinishedWorkingTime = WorkingTime::where('user_id', Auth::id())
+        $unfinishedWorkingTime = WorkingTime::where('user_id', $request->user()->id)
             ->where('date', $today)
             ->whereNull('end')
             ->exists();
@@ -168,7 +168,7 @@ class WorkingTimeController extends Controller
 
     public function workStarted(Request $request)
     {
-        $overlappingSickLeave = SickLeave::where('user_id', Auth::id())
+        $overlappingSickLeave = SickLeave::where('user_id', $request->user()->id)
             ->where(function ($query) {
                 $query->where('start_date', '<=', now()->format('Y-m-d'))
                     ->where('end_date', '>=', now()->format('Y-m-d'));
@@ -179,7 +179,7 @@ class WorkingTimeController extends Controller
             return redirect()->route('home')->with('status', 'working-time-cannot-be-started-during-sick-leave');
         }
 
-        $overlappingVacation = Vacation::where('user_id', Auth::id())
+        $overlappingVacation = Vacation::where('user_id', $request->user()->id)
             ->where(function ($query) {
                 $query->where('start_date', '<=', now()->format('Y-m-d'))
                     ->where('end_date', '>=', now()->format('Y-m-d'));
@@ -191,7 +191,7 @@ class WorkingTimeController extends Controller
         }
 
         WorkingTime::create([
-            'user_id' => Auth::id(),
+            'user_id' => $request->user()->id,
             'date' => now()->format('Y-m-d'),
             'begin' => now()->format('H:i:s'),
             'end' => null,
@@ -203,7 +203,7 @@ class WorkingTimeController extends Controller
     public function workEnded(Request $request)
     {
         $today = now()->format('Y-m-d');
-        $workingTime = WorkingTime::where('user_id', Auth::id())
+        $workingTime = WorkingTime::where('user_id', $request->user()->id)
             ->where('date', $today)
             ->whereNull('end')
             ->first();
