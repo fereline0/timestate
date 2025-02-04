@@ -16,8 +16,8 @@ class UpdateWorkingTimeRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
-            'begin' => 'required|date_format:H:i:s',
-            'end' => 'required|date_format:H:i:s|after:begin',
+            'begin' => 'required',
+            'end' => 'required|after:begin',
         ];
     }
 
@@ -29,9 +29,7 @@ class UpdateWorkingTimeRequest extends FormRequest
             'date.required' => 'Пожалуйста, укажите дату.',
             'date.date' => 'Пожалуйста, введите корректную дату.',
             'begin.required' => 'Пожалуйста, укажите время начала.',
-            'begin.date_format' => 'Время начала должно быть в формате HH:MM:SS.',
             'end.required' => 'Пожалуйста, укажите время окончания.',
-            'end.date_format' => 'Время окончания должно быть в формате HH:MM:SS.',
             'end.after' => 'Время окончания должно быть позже времени начала.',
         ];
     }
